@@ -1,0 +1,52 @@
+version: '3'
+services:
+
+  #PHP Service
+  cli:
+    container_name: sidekicker-node-cli
+    build:
+      dockerfile: ./Dockerfile
+    image: cli
+    restart: unless-stopped
+    tty: true
+    working_dir: /var/www
+    volumes:
+      - ./:/var/www
+      - '/var/www/node_modules'
+    environment:
+      DATABASE_URL: mysql://root:root@db:3306/cli
+      DATABASE_NAME: cli
+      DATABASE_USERNAME: root
+      DATABASE_PASSWORD: root
+      DATABASE_HOST: db
+    networks:
+      - app-network
+
+  #MySQL Service
+  db:
+    container_name: sidekicker-node-db
+    image: mysql:8.0
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_DATABASE: cli
+      MYSQL_ROOT_PASSWORD: root
+      SERVICE_TAGS: dev
+      SERVICE_NAME: mysql
+    volumes:
+      - dbdata:/var/lib/mysql
+      - ./cli/docker/mysql/my.cnf:/etc/mysql/my.cnf
+    networks:
+      - app-network
+
+#Docker Networks
+networks:
+  app-network:
+    driver: bridge
+
+#Volumes
+volumes:
+  dbdata:
+    driver: local
