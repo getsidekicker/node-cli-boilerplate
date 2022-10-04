@@ -1,7 +1,6 @@
 version: '3'
 services:
 
-  #PHP Service
   cli:
     container_name: sidekicker-node-cli
     build:
@@ -22,7 +21,6 @@ services:
     networks:
       - app-network
 
-  #MySQL Service
   db:
     container_name: sidekicker-node-db
     image: mysql:8.0
@@ -37,16 +35,13 @@ services:
       SERVICE_NAME: mysql
     volumes:
       - dbdata:/var/lib/mysql
-      - ./cli/docker/mysql/my.cnf:/etc/mysql/my.cnf
     networks:
       - app-network
 
-#Docker Networks
 networks:
   app-network:
     driver: bridge
 
-#Volumes
 volumes:
   dbdata:
     driver: local
