@@ -6,7 +6,6 @@ services:
     build:
       dockerfile: ./Dockerfile
     image: cli
-    restart: unless-stopped
     tty: true
     working_dir: /var/www
     volumes:
@@ -24,7 +23,6 @@ services:
   db:
     container_name: sidekicker-node-db
     image: mysql:8.0
-    restart: unless-stopped
     tty: true
     ports:
       - "3306:3306"
